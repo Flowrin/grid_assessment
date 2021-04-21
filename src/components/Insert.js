@@ -12,10 +12,9 @@ class Insert extends React.Component {
   };
 
   onSearchSubmit = async (term) => {
-  
     const perPage = 15;
     const res = await unsplash.get('/search/photos', {
-      params: { query: term,  per_page: perPage },
+      params: { query: term, per_page: perPage },
     });
     this.setState({ images: res.data.results });
   };

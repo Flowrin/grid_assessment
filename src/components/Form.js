@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { items } from '../util/items';
 import Link from '../util/Link';
- class Form extends Component {
+class Form extends Component {
+  _isMounted = false;
   state = {
     selectedImage: '',
     title: '',
@@ -9,12 +10,21 @@ import Link from '../util/Link';
   };
 
   componentDidMount() {
-    window.addEventListener('click', () => {
-      this.setState({ selectedImage: this.props.imageLink });
-    });
+    this.interval = setTimeout(() => {
+      this._isMounted = true;
+      window.addEventListener('click', () => {
+        if (this._isMounted)
+          this.setState({ selectedImage: this.props.imageLink });
+      });
+    }, 100);
   }
-  onSubmit = (e) => {
-    e.preventDefault();
+  componentWillUnmount() {
+    clearTimeout(this.interval);
+    this._isMounted = false;
+  }
+
+  onSubmit = (event) => {
+    event.preventDefault();
     items.unshift({
       title: this.state.title,
       description: this.state.description,
@@ -75,4 +85,4 @@ import Link from '../util/Link';
     );
   }
 }
-export default Form
+export default Form;
